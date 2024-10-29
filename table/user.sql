@@ -8,6 +8,7 @@ CREATE TABLE USERS (
     phone VARCHAR(255),                        -- phone (optional)
     api_key VARCHAR(255),                      -- Store api key of user
     api_key_hash VARCHAR(255),                 -- Store api key of user
+    email_activation_token VARCHAR(255),       -- Store email activation token key of user
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Automatically set on record creation
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- Automatically updated on changes
 );

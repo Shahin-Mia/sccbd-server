@@ -9,6 +9,8 @@ use Slim\Factory\AppFactory;
 use Slim\Handlers\Strategies\RequestResponseArgs;
 
 define("APP_ROOT", dirname(__DIR__));
+// define("IMAGE_FOLDER", APP_ROOT . "/../public/images/"); // production server image path
+define("IMAGE_FOLDER", APP_ROOT . "/../sccbd/public/images/"); // development server image path
 
 require APP_ROOT . "/vendor/autoload.php";
 
@@ -37,6 +39,8 @@ $error_handler = $error_middleware->getDefaultErrorHandler();
 $error_handler->forceContentType("application/json");
 
 $app->add(new AddJsonResponseHeader);
+
+$app->setBasePath("/slim");
 
 require APP_ROOT . "/config/routes.php";
 

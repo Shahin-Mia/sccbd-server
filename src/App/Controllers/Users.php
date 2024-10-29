@@ -88,7 +88,7 @@ class Users
 
         try {
             $this->repository->create($data);
-            $file->moveTo(APP_ROOT . "/../sccbd/public/images/" . $filename);
+            $file->moveTo(IMAGE_FOLDER . $filename);
         } catch (Exception $e) {
             $response->getBody()->write(json_encode(["message" => $e->getMessage()]));
             return $response->withStatus(500);
@@ -118,6 +118,7 @@ class Users
 
             $userData = [];
 
+            $userData["id"] = $user["id"];
             $userData["username"] = $user["username"];
             $userData["profile_image"] = $user["profile_image"];
             $userData["email"] = $user["email"];
@@ -125,8 +126,9 @@ class Users
             $userData["api_key"] = $api_key;
 
             $response->getBody()->write(json_encode([
-                "user" => $userData,
-                "message" => "login successfully!"
+                "status" => "success",
+                "message" => "logged in successfully!",
+                "user" => $userData
             ]));
 
             return $response;
@@ -298,5 +300,32 @@ class Users
                 "message" => "Account has activated successfully!"
             ]));
         }
+    }
+
+    public function getAllUsers(Request $request, Response $response)
+    {
+        $data = $this->repository->getAll();
+
+        $body = json_encode($data);
+
+        $response->getBody()->write($body);
+
+        return $response;
+    }
+
+    public function delete(Request $request, Response $response, string $id)
+    {
+        $user = $request->getAttribute("user");
+        try {
+            unlink(IMAGE_FOLDER . $user["profile_image"]);
+        } catch (Exception $th) {
+            $response->getBody()->write(json_encode(["status" => "error", "message" => "User was not deleted!"]));
+            return $response->withStatus(500);
+        }
+
+        $rows = $this->repository->delete((int) $id);
+        $response->getBody()->write(json_encode(["status" => "success", "message" => "User was deleted!", "rows" => $rows]));
+
+        return $response;
     }
 }

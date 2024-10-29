@@ -98,4 +98,38 @@ class UserRepository
 
         $stmt->execute();
     }
+
+    public function getAll(): array
+    {
+        $pdo = $this->database->getConnection();
+
+        $stmt = $pdo->query("SELECT id, username, email, role, profile_image FROM USERS WHERE role <> \"student\"");
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
+    public function delete(int $id): int
+    {
+        $sql = "DELETE FROM USERS
+                WHERE id = :id";
+
+        $pdo = $this->database->getConnection();
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        return $stmt->rowCount();
+    }
+
+    public function getById(int $id): array | bool
+    {
+        $sql = "SELECT * FROM USERS WHERE id = :id";
+        $pdo = $this->database->getConnection();
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }

@@ -15,6 +15,7 @@ class AddJsonResponseHeader
         $response = $handler->handle($request);
         return $response->withHeader("Content-Type", "application/json")
             ->withHeader('Access-Control-Allow-Origin', '*')
-            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization, x-api-key');
+            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization, x-api-key')
+            ->withHeader('Access-control-Allow-Methods', 'DELETE, GET, PATCH, POST');
     }
 }
